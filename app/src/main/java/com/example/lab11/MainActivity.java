@@ -68,7 +68,35 @@ public class MainActivity extends AppCompatActivity {
 
         btn_update.setOnClickListener(vuew->{
             if(ed_book.length()<1||ed_price.length()<1)
+                Toast.makeText(MainActivity.this,"欄位請勿留空",Toast.LENGTH_SHORT).show();
+            else{
+                try{
+                    dbrw.execSQL("UPDATE myTable SET price="
+                                 +ed_price.getText().toString()
+                                 +" WHERE book LIKE '"
+                                 +ed_book.getText().toString()+"'");
+                    Toast.makeText(MainActivity.this,"更新書名"+ed_book.getText().toString()+
+                            "      價格"+ed_price.getText().toString(),Toast.LENGTH_SHORT).show();
+                    ed_book.setText("");
+                    ed_price.setText("");
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(MainActivity.this,"更新失敗:"+e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
 
+        });
+
+        btn_delete.setOnClickListener(view -> {
+            if(ed_book.length()<1)
+                Toast.makeText(MainActivity.this,"書名請勿留空",Toast.LENGTH_SHORT).show();
+            else{
+                try{
+                    dbrw.execSQL("DELETE FROM myTable WHERE book LIKE '"+ed_book.getText().toString()+"'");
+
+                }
+            }
         });
     }
 }
