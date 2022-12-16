@@ -59,7 +59,16 @@ public class MainActivity extends AppCompatActivity {
                     ed_book.setText("");
                     ed_price.setText("");
                 }
+                catch(Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(MainActivity.this,"新增失敗:"+e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
             }
+        });
+
+        btn_update.setOnClickListener(vuew->{
+            if(ed_book.length()<1||ed_price.length()<1)
+
         });
     }
 }
