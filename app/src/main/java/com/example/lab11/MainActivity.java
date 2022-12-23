@@ -2,6 +2,7 @@ package com.example.lab11;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -94,9 +95,34 @@ public class MainActivity extends AppCompatActivity {
             else{
                 try{
                     dbrw.execSQL("DELETE FROM myTable WHERE book LIKE '"+ed_book.getText().toString()+"'");
-
+                    Toast.makeText(MainActivity.this,"刪除書名"+
+                            ed_book.getText().toString(),Toast.LENGTH_SHORT).show();
+                    ed_book.setText("");
+                    ed_price.setText("");
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(MainActivity.this,"刪除失敗:"+e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
+        });
+        btn_query.setOnClickListener(view -> {
+            Cursor c;
+            if(ed_book.length()<1)
+                c=dbrw.rawQuery("SELECT*FROM myTable",null);
+            else
+                c=dbrw.rawQuery("SELECT*FROM myTable WHERE book LIKE '"+
+                        ed_book.getText().toString()+"'",null);
+
+            c.moveToFirst();
+            items.clear();
+            Toast.makeText(MainActivity.this,"共有"+c.getCount()+"筆",Toast.LENGTH_SHORT).show();
+            for(int i=0;i<c.getCount();i++){
+                items.add("書籍:"+c.getString(0)+"\t\t\t\t價格:"+c.getString(1));
+                c.moveToNext();
+            }
+            adapter.notifyDataSetChanged();
+            c.close();
         });
     }
 }
